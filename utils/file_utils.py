@@ -27,7 +27,7 @@ def extract_text_from_file(uploaded_file):
     text = ""
     try:
         if file_type.endswith(".pdf"):
-            pages = convert_from_path(tmp_path, dpi=300, poppler_path=POPPLER_PATH)
+            pages = convert_from_path(tmp_path, dpi=300 )
             for page in pages:
                 processed = preprocess_image(page)
                 text += pytesseract.image_to_string(processed)
@@ -35,6 +35,10 @@ def extract_text_from_file(uploaded_file):
             image = Image.open(tmp_path)
             processed = preprocess_image(image)
             text += pytesseract.image_to_string(processed)
+    finally:
+        os.remove(tmp_path)
+
+    return text.strip()
     finally:
         os.remove(tmp_path)
 
